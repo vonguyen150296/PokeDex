@@ -1,17 +1,23 @@
 /** models */
 import type { POKE_MODEL } from "@/models/Poke.model";
-import type { GET_ALL_POKE_MODEL } from "@/models/PokeHttp.model";
 
 class PokeDataServices {
-    transform_fetched_data_to_PokesList(data: GET_ALL_POKE_MODEL): POKE_MODEL[] {
-        let api_url = import.meta.env.VITE_API_URL;
+    transform_fetched_data_to_pokesList(data: POKE_MODEL[]): POKE_MODEL[] {
 
-        let results: POKE_MODEL[] = data.results.map(item => {
-            let id = item.url.replace(api_url, "").replace("/", "");
+        let results: POKE_MODEL[] = data.map(item => {
             let tmp: POKE_MODEL = {
+                id: item.id,
                 name: item.name,
-                id: parseInt(id),
-                image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id+".png"
+                height: item.height,
+                weight: item.weight,
+                order: item.order,
+                base_experience: item.base_experience,
+                sprites: {
+                    back_default: item.sprites.back_default,
+                    back_female: item.sprites.back_female,
+                    front_default: item.sprites.front_default,
+                    front_female: item.sprites.front_female
+                }
             }
             return tmp;
         });

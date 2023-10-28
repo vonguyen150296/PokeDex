@@ -4,6 +4,8 @@ import { onBeforeMount } from "vue";
 
 /** components */
 import Header from './components/Header.vue';
+import Spinner from './components/Spinner.vue';
+import Footer from './components/Footer.vue';
 
 /** Services */
 import PokeDataHttpService from './services/http/PokeData.service';
@@ -17,19 +19,60 @@ import { PokeStore } from './stores/Poke.store';
 const POKE_STORE = PokeStore();
 
 onBeforeMount(() => {
+  POKE_STORE.addNumReq();
   PokeDataHttpService.getAllPoke().then(res => {
-    let pokesList: POKE_MODEL[] = PokeDataService.transform_fetched_data_to_PokesList(res.data);
 
-    /** save pokes list in store */
-    POKE_STORE.initPokesList(pokesList);
-  })
+    /** get poke details */
+    let pokesListDetail: POKE_MODEL[] = [];
+    let count = 0;
+    res.data.results?.forEach(item => {
+      PokeDataHttpService.getPoke(item.name).then(res2 => {
+        pokesListDetail.push(res2.data);
+        count++;
+      }).catch(err => count++);
+    })
+
+    let interval = setInterval(() => {
+      if (count === res.data.results.length) {
+        clearInterval(interval);
+        POKE_STORE.subtractNumReq();
+        let pokesList: POKE_MODEL[] = PokeDataService.transform_fetched_data_to_pokesList(pokesListDetail);
+
+        /** save pokes list in store */
+        POKE_STORE.initPokesList(pokesList);
+
+      }
+    }, 100)
+  }).catch(err => POKE_STORE.subtractNumReq())
 })
+
+const heightApp = window.innerHeight - 72;
 
 </script>
 
 <template>
   <Header></Header>
-  <RouterView />
-</template>
 
-<style scoped></style>
+  <!-- Content -->
+  <div class="bg-gray-200 dark:bg-gray-500 w-full" :style="{ 'height': heightApp + 'px' }">
+    <Transition>
+      <Spinner v-if="POKE_STORE.numReq > 0"></Spinner>
+    </Transition>
+    <RouterView />
+  </div>
+
+  <Footer></Footer>
+</template>
+<style scoped lang="scss">
+.v-leave-from {
+  opacity: 1;
+}
+
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-leave-active {
+  transition: all 0.7s ease-out;
+}
+</style>
