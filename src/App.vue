@@ -3,9 +3,9 @@ import { RouterView } from 'vue-router';
 import { onBeforeMount } from "vue";
 
 /** components */
-import Header from './components/Header.vue';
-import Spinner from './components/Spinner.vue';
-import Footer from './components/Footer.vue';
+import Header from './components/HeaderComponent.vue';
+import Spinner from './components/SpinnerComponent.vue';
+import Footer from './components/FooterComponent.vue';
 
 /** Services */
 import PokeDataHttpService from './services/http/PokeData.service';
@@ -29,7 +29,10 @@ onBeforeMount(() => {
       PokeDataHttpService.getPoke(item.name).then(res2 => {
         pokesListDetail.push(res2.data);
         count++;
-      }).catch(err => count++);
+      }).catch(err => {
+        console.error(err);
+        count++;
+      });
     })
 
     let interval = setInterval(() => {
@@ -43,7 +46,10 @@ onBeforeMount(() => {
 
       }
     }, 100)
-  }).catch(err => POKE_STORE.subtractNumReq())
+  }).catch(err => {
+    console.error(err);
+    POKE_STORE.subtractNumReq();
+  })
 })
 
 const heightApp = window.innerHeight - 72;

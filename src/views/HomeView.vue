@@ -2,10 +2,10 @@
 import { onBeforeMount, reactive } from "vue";
 
 /** Components */
-import CategoryFilter from "@/components/CategoryFilter.vue";
-import TextFilter from "@/components/TextFilter.vue";
-import Cart from "@/components/Cart.vue";
-import Pagination from "@/components/Pagination.vue";
+import CategoryFilter from "@/components/CategoryFilterComponent.vue";
+import TextFilter from "@/components/TextFilterComponent.vue";
+import Cart from "@/components/CartComponent.vue";
+import Pagination from "@/components/PaginationComponent.vue";
 
 /** Models */
 import type { FILTER_INFOS_MODEL } from "@/models/Poke.model";
@@ -33,7 +33,7 @@ function textFilter(keywords: string) {
   state.keywords = keywords;
 }
 
-function categoryFilter(filterObj: FILTER_INFOS_MODEL){
+function categoryFilter(filterObj: FILTER_INFOS_MODEL) {
   state.filterObj = filterObj;
 }
 
@@ -54,7 +54,7 @@ function categoryFilter(filterObj: FILTER_INFOS_MODEL){
       <!-- Pokemon List -->
       <div :style="{ 'height': heightList + 'px' }" class="home__content-list">
         <div class="grid max-w-6xl  grid-cols-1 gap-6 p-4 sm:grid-cols-3 md:grid-cols-5">
-          <template v-for="poke in POKE_STORE.getPokesList(state.keywords, state.filterObj)">
+          <template v-for="poke in POKE_STORE.getPokesList(state.keywords, state.filterObj)" :key="poke.id">
             <Cart :data="poke"></Cart>
           </template>
         </div>

@@ -40,7 +40,7 @@ onUpdated(() => {
 function updateCurrentPage(value: string) {
   /** update current page */
   if (value === 'next') {
-    if (state.currentPage < 12) state.currentPage++;
+    if (state.currentPage < Math.ceil(POKE_STORE.pokesListLength / 25)) state.currentPage++;
   } else if (value === 'prev') {
     if (state.currentPage > 1) state.currentPage--;
   } else state.currentPage = parseInt(value);
@@ -52,8 +52,8 @@ function updateCurrentPage(value: string) {
 <template>
   <div class="pagination">
     <div class="pagination__mobile">
-      <a class="pagination__mobile-prevBtn">Previous</a>
-      <a href="#" class="pagination__mobile-nextBtn">Next</a>
+      <a class="pagination__mobile-prevBtn" @click="updateCurrentPage('prev')">Previous</a>
+      <a href="#" class="pagination__mobile-nextBtn" @click="updateCurrentPage('next')">Next</a>
     </div>
     <div class="pagination__pc">
       <p class="pagination__pc-message" v-if="POKE_STORE.pokesListLength"> Showing
@@ -78,8 +78,8 @@ function updateCurrentPage(value: string) {
           <span class="sr-only">Previous</span>
           <ChevronLeftIcon class="h-2 w-4" aria-hidden="true" />
         </a>
-        <template v-for="page in state.pageArr">
-          <a href="#" :key="page" aria-current="page" v-if="page !== '...'" @click="updateCurrentPage(page)"
+        <template v-for="page in state.pageArr" :key="page">
+          <a href="#" aria-current="page" @click="updateCurrentPage(page)"
             :class="state.currentPage.toString() == page ? 'activeBtn' : 'noActiveBtn'" class="aBtn">{{
               page }}</a>
         </template>

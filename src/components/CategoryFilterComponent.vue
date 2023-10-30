@@ -49,7 +49,7 @@ function updateFilterInfos(key: string, all: boolean) {
       });
     } else if (!all) {
       state.filterInfos[key].options[0].checked = false;
-      let checked = state.filterInfos[key].options.find((el, index) => el.checked);
+      let checked = state.filterInfos[key].options.find((el) => el.checked);
       if(checked == undefined) state.filterInfos[key].options[0].checked = true;
     }
     

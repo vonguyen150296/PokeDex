@@ -4,8 +4,8 @@ import type { POKE_MODEL } from "@/models/Poke.model";
 class PokeDataServices {
     transform_fetched_data_to_pokesList(data: POKE_MODEL[]): POKE_MODEL[] {
 
-        let results: POKE_MODEL[] = data.map(item => {
-            let tmp: POKE_MODEL = {
+        const results: POKE_MODEL[] = data.map(item => {
+            const tmp: POKE_MODEL = {
                 id: item.id,
                 name: item.name,
                 height: item.height,

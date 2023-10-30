@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 //@ts-ignore
-import HomeView from '../views/Home.view.vue';
+import HomeView from '../views/HomeView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +13,7 @@ const router = createRouter({
       path: "/detail/:name",
       name: "Detail",
       //@ts-ignore
-      component: () => import("../views/Detail.view.vue"),
+      component: () => import("../views/DetailView.vue"),
       meta: { title: "Poke | Detail"}
     }
   ]

@@ -72,9 +72,9 @@ export const PokeStore = defineStore({
         state.filterObj = filterObj
 
         /** filter with min, max attr */
-        for (let key in filterObj) {
+        for (const key in filterObj) {
           if (!filterObj[key].options[0].checked) {
-            result = result.filter((po, index) => {
+            result = result.filter((po) => {
               let check = false
               filterObj[key].options.forEach((opt) => {
                 if (opt.checked) {
@@ -85,7 +85,7 @@ export const PokeStore = defineStore({
                 }
               })
 
-              if (check) return po
+              if (check) return po;
             })
           }
         }
@@ -101,7 +101,7 @@ export const PokeStore = defineStore({
     },
     getPokeDetail: (state) => {
       return (name: string) => {
-        let poke = state.pokesList.find((poke) => poke.name === name)
+        const poke = state.pokesList.find((poke) => poke.name === name)
         return poke
       }
     }
@@ -121,6 +121,9 @@ export const PokeStore = defineStore({
     },
     subtractNumReq() {
       if (this.numReq > 0) this.numReq -= 1
+    },
+    updatePokesListLength(len : number){
+      this.pokesListLength = len;
     }
   }
 })
